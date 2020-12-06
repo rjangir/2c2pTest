@@ -4,6 +4,11 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RahulTest.Core\RahulTest.Core.csproj" />
+    <ProjectReference Include="..\RahulTest.Infrastructure\RahulTest.Infrastructure.csproj" />
+  </ItemGroup>
+
 
 
 </Project>

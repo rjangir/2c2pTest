@@ -8,6 +8,10 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RahulTest.Core.Abstractions.FileParsers;
+using RahulTest.Core.Abstractions.Validators;
+using RahulTest.Infrastructure.FileParsers;
+using RahulTest.Infrastructure.Validators;
 
 namespace RahulTest.Web
 {
@@ -24,6 +28,10 @@ namespace RahulTest.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddSingleton<IUploadedFIleInfoValidator, UploadedFIleInfoValidator>();
+
+            services.AddTransient<IParser, FileParser>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
