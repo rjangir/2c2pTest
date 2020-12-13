@@ -18,7 +18,7 @@
         </dd>
     </dl>
 
-    <input class="btn btn-primary type="submit" value="Upload" />
+    <input class="btn btn-primary" type="submit" value="Upload" />
 
     <div style="margin-top:15px">
         <output name="result"></output>
@@ -26,11 +26,13 @@
 </form>
 
 <script>
-  async function AJAXSubmit (oFormElement) {
+    async function AJAXSubmit(oFormElement) {
+        console.log("dasda");
     var resultElement = oFormElement.elements.namedItem("result");
     const formData = new FormData(oFormElement);
 
-    try {
+      try {
+          console.log(FormData);
     const response = await fetch(oFormElement.action, {
       method: 'POST',
       body: formData

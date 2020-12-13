@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RahulTest.Core.Abstractions.FileParsers;
+using RahulTest.Core.Abstractions.Services;
 using RahulTest.Core.Abstractions.Validators;
+using RahulTest.Core.Dtos;
 using RahulTest.Core.Exceptions;
+using RahulTest.Domain.EF.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,13 +17,15 @@ namespace RahulTest.Web.Controllers
 {
     [ApiController]
     [Route("api")]
-    public class TransactionsController :ControllerBase
+    public class TransactionsController : ControllerBase
     {
         private readonly IUploadedFIleInfoValidator uploadedFIleInfoValidator;
         private readonly IParser parser;
-        public TransactionsController(IUploadedFIleInfoValidator fIleInfoValidator,IParser fileParser)
+        private readonly ITransactionsService _transactionsService;
+        public TransactionsController(IUploadedFIleInfoValidator fIleInfoValidator, IParser fileParser, ITransactionsService transactionsService)
         {
             uploadedFIleInfoValidator = fIleInfoValidator;
+            _transactionsService = transactionsService;
             parser = fileParser;
 
         }
@@ -36,19 +41,28 @@ namespace RahulTest.Web.Controllers
                 try
                 {
                     var format = file.FileName.Substring(file.FileName.LastIndexOf(".") + 1);
-                    uploadedFIleInfoValidator.Validate(format,file.Length);
+                    uploadedFIleInfoValidator.Validate(format, file.Length);
 
                     var result = new StringBuilder();
-                    
+
                     using (var reader = new StreamReader(file.OpenReadStream()) as TextReader)
                     {
-                        parser.Parse(reader, format);
-                        while (reader.Peek() >= 0)
-                            result.AppendLine(await reader.ReadLineAsync());
+                        var transactionsModel = parser.ParseValidate(reader, format);
+                        if (transactionsModel.Any())
+                        {
+                            await _transactionsService.SaveTransactions(transactionsModel.ToList());
+                            return Ok();
+
+                        }
+                        else
+                        {
+                            return BadRequest("No records found");
+                        }
+
                     }
 
                 }
-                catch (InvalidFileFormatException ex )
+                catch (InvalidFileFormatException ex)
                 {
                     return BadRequest(ex.Message);
                 }
@@ -56,8 +70,62 @@ namespace RahulTest.Web.Controllers
                 {
                     return BadRequest(ex.Message);
                 }
+                catch(Exception ex)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+
+                }
             }
-            return Ok();
+
+            return BadRequest("No input file");
+        }
+
+        [Route("getByid/{id}")]
+        public IActionResult GetById(string id)
+        {
+            try
+            {
+                return Ok(_transactionsService.GetById(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+
+            }
+        }
+
+        [Route("getByDate/{date}")]
+        public IActionResult getByDate(string date)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(date))
+                {
+                    var dateTime = DateTime.Parse(date);
+                    return Ok(_transactionsService.GetByDateRange(dateTime));
+                }
+                else
+                {
+                    return BadRequest("Incorrect Date format");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+
+            }
+        }
+        [Route("getByStatus/{status}")]
+        public IActionResult getByStatus(TransactionStatus status)
+        {
+            try
+            {
+                return Ok(_transactionsService.GetByStatus(status));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
     }
 }
