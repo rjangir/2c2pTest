@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>RahulTest.Infrastructure</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="18.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RahulTest.Common\RahulTest.Common.csproj" />
+    <ProjectReference Include="..\RahulTest.Core\RahulTest.Core.csproj" />
+    <ProjectReference Include="..\RahulTest.Domain.EF.Repositories\RahulTest.Domain.EF.Repositories.csproj" />
+  </ItemGroup>
+
+</Project>
