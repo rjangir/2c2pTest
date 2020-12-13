@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using RahulTest.Core.Abstractions.FileParsers;
 using RahulTest.Core.Abstractions.Services;
 using RahulTest.Core.Abstractions.Validators;
-using RahulTest.Core.Dtos;
 using RahulTest.Core.Exceptions;
 using RahulTest.Domain.EF.Core.Entities;
 using System;
@@ -60,7 +59,6 @@ namespace RahulTest.Web.Controllers
                         }
 
                     }
-
                 }
                 catch (InvalidFileFormatException ex)
                 {
