@@ -18,14 +18,14 @@ namespace RahulTest.Web.Controllers
     [Route("api")]
     public class TransactionsController : ControllerBase
     {
-        private readonly IUploadedFIleInfoValidator uploadedFIleInfoValidator;
-        private readonly IParser parser;
+        private readonly IUploadedFIleInfoValidator _uploadedFIleInfoValidator;
+        private readonly IParseManager _parser;
         private readonly ITransactionsService _transactionsService;
-        public TransactionsController(IUploadedFIleInfoValidator fIleInfoValidator, IParser fileParser, ITransactionsService transactionsService)
+        public TransactionsController(IUploadedFIleInfoValidator fIleInfoValidator, IParseManager fileParser, ITransactionsService transactionsService)
         {
-            uploadedFIleInfoValidator = fIleInfoValidator;
+            _uploadedFIleInfoValidator = fIleInfoValidator;
             _transactionsService = transactionsService;
-            parser = fileParser;
+            _parser = fileParser;
 
         }
 
@@ -40,13 +40,13 @@ namespace RahulTest.Web.Controllers
                 try
                 {
                     var format = file.FileName.Substring(file.FileName.LastIndexOf(".") + 1);
-                    uploadedFIleInfoValidator.Validate(format, file.Length);
+                    _uploadedFIleInfoValidator.Validate(format, file.Length);
 
                     var result = new StringBuilder();
 
-                    using (var reader = new StreamReader(file.OpenReadStream()) as TextReader)
+                    using (var reader = new StreamReader(file.OpenReadStream()))
                     {
-                        var transactionsModel = parser.ParseValidate(reader, format);
+                        var transactionsModel = _parser.ParseValidate(reader, format);
                         if (transactionsModel.Any())
                         {
                             await _transactionsService.SaveTransactions(transactionsModel.ToList());
@@ -68,7 +68,12 @@ namespace RahulTest.Web.Controllers
                 {
                     return BadRequest(ex.Message);
                 }
-                catch(Exception ex)
+                catch (FileParseValidationException fpex)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, fpex.Message);
+
+                }
+                catch (Exception ex)
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 
