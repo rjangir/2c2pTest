@@ -15,7 +15,7 @@ namespace RahulTest.Domain.EF.Core.Entities
 
     public enum TransactionStatus
     {
-        Approved,
+        Approved = 1,
         Rejected,
         Done
     }
