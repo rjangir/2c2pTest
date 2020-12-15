@@ -42,6 +42,8 @@ namespace RahulTest.Web
 
             services.AddControllersWithViews();
 
+            services.AddSwaggerGen();
+
             services.AddSingleton<IUploadedFIleInfoValidator, UploadedFIleInfoValidator>();
 
             services.AddTransient<IParseManager, ParseManager>();
@@ -69,6 +71,13 @@ namespace RahulTest.Web
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseSwagger();
+            
+                app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
             app.UseRouting();
 
