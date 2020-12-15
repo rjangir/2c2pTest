@@ -6,6 +6,7 @@ namespace RahulTest.Core.Abstractions.FileParsers
 {
     public interface IParser
     {
-        IEnumerable<Transaction> ParseValidate(TextReader reader,string format);
+        IEnumerable<Transaction> ParseValidate(StreamReader reader);
+
     }
 }

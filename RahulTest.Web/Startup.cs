@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RahulTest.Core.Abstractions.Factories;
 using RahulTest.Core.Abstractions.FileParsers;
 using RahulTest.Core.Abstractions.Services;
 using RahulTest.Core.Abstractions.UnitOfWork;
@@ -16,6 +17,7 @@ using RahulTest.Core.Abstractions.Validators;
 using RahulTest.Domain.EF.Core.Abstractions;
 using RahulTest.Domain.EF.Repositories.Data;
 using RahulTest.Domain.EF.Repositories.Repositories;
+using RahulTest.Infrastructure.Factories;
 using RahulTest.Infrastructure.FileParsers;
 using RahulTest.Infrastructure.Services;
 using RahulTest.Infrastructure.UnitOfWork;
@@ -42,8 +44,9 @@ namespace RahulTest.Web
 
             services.AddSingleton<IUploadedFIleInfoValidator, UploadedFIleInfoValidator>();
 
-            services.AddTransient<IParser, FileParser>();
-           // services.AddTransient<ITransactionRepository, TransactionRepository>();
+            services.AddTransient<IParseManager, ParseManager>();
+            services.AddTransient<IParserFactory, ParserFactory>();
+            // services.AddTransient<ITransactionRepository, TransactionRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddTransient<ITransactionsService, TransactionsService>();
 
@@ -52,6 +55,7 @@ namespace RahulTest.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext dataContext)
         {
+            dataContext.Database.EnsureCreated();
             dataContext.Database.Migrate();
             if (env.IsDevelopment())
             {
