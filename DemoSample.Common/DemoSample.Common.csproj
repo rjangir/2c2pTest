@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>DemoSample.Common</AssemblyName>
+    <RootNamespace>DemoSample.Common</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DemoSample.Domain.EF.Core\DemoSample.Domain.EF.Core.csproj" />
+  </ItemGroup>
+
+</Project>

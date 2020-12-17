@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>DemoSample.Infrastructure</RootNamespace>
+    <AssemblyName>DemoSample.Infrastructure</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="18.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DemoSample.Common\DemoSample.Common.csproj" />
+    <ProjectReference Include="..\DemoSample.Core\DemoSample.Core.csproj" />
+    <ProjectReference Include="..\DemoSample.Domain.EF.Repositories\DemoSample.Domain.EF.Repositories.csproj" />
+  </ItemGroup>
+
+</Project>
