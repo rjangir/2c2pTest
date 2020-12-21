@@ -9,7 +9,9 @@ namespace DemoSample.Core.Abstractions.Services
     public interface ITransactionsService
     {
         IEnumerable<TransactionDto> GetByDateRange(DateTime dateTime);
-        IEnumerable<TransactionDto> GetById(string id);
+        TransactionDto GetById(string id);
+
+        IEnumerable<TransactionDto> GetByCurrency(string currencyCode);
         IEnumerable<TransactionDto> GetByStatus(TransactionStatus status);
         Task SaveTransactions(IList<Transaction> transactions);
     }

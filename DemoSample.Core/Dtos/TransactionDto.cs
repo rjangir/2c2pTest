@@ -9,7 +9,7 @@ namespace DemoSample.Core.Dtos
     public class TransactionDto
     {
         public string Id { get; set; }
-        public string Amount { get; set; }
+        public string Payment { get; set; }
         public string Status { get; set; }
 
         public static string GetStatus(TransactionStatus transactionStatus)
