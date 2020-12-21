@@ -12,7 +12,7 @@ namespace DemoSample.Infrastructure.Helpers
         public static TransactionDto ToTransactionDto(this Transaction transaction) => new TransactionDto
         {
             Id = transaction.TransactionIdentifier,
-            Amount = $"{transaction.Amount} {transaction.CurrencyCode}",
+            Payment = $"{transaction.Amount} {transaction.CurrencyCode}",
             Status = TransactionDto.GetStatus(transaction.Status)
         };
 

@@ -27,9 +27,14 @@ namespace DemoSample.Infrastructure.Services
             await _unitOfWork.CommitAsync();
         }
 
-        public IEnumerable<TransactionDto> GetById(string id)
+        public TransactionDto GetById(string id)
         {
-            var transactions = _unitOfWork.TransactionRepository.GetTransactions(x => x.TransactionIdentifier == id);
+            var transactions = _unitOfWork.TransactionRepository.GetTransactions(x => x.TransactionIdentifier == id).FirstOrDefault();
+            return transactions.ToTransactionDto();
+        }
+        public IEnumerable<TransactionDto> GetByCurrency(string currencyCode)
+        {
+            var transactions = _unitOfWork.TransactionRepository.GetTransactions(x => x.CurrencyCode== currencyCode);
             return transactions.ToTransactionDtos();
         }
         public IEnumerable<TransactionDto> GetByDateRange(DateTime dateTime)
